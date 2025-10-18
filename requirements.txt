@@ -1,0 +1,2 @@
+streamlit==1.38.0
+twilio==9.8.0
