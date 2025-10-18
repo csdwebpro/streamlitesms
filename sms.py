@@ -181,11 +181,24 @@ if st.session_state.history:
 st.markdown("---")
 st.caption("Logs are appended to local file 'sent.log' (UTC timestamps). This app enforces a minimal rate limit and requires explicit consent. Do not use for unsolicited messages or spoofing.")
 
+# -------------------
 # requirements.txt
+# -------------------
+streamlit==1.38.0
+twilio==9.8.0
 
-# Core
-streamlit
+# -------------------
+# Procfile
+# -------------------
+web: streamlit run streamlit_app.py --server.port=$PORT --server.enableCORS=false
 
-# Optional (required only for Twilio mode)
-twilio
-
+# -------------------
+# Dockerfile
+# -------------------
+FROM python:3.11-slim
+WORKDIR /app
+COPY . /app
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
+EXPOSE 8501
+CMD ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.enableCORS=false"]
